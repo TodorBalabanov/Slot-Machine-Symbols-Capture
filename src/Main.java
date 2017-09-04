@@ -26,6 +26,34 @@ public class Main {
 			{ 966, 616, 1154, 756 }, };
 
 	/**
+	 * Calculate average color for the image.
+	 * 
+	 * @param image
+	 *            Image as input.
+	 * @return Average color as integer value.
+	 */
+	private static int averageColor(BufferedImage image) {
+		long red = 0;
+		long green = 0;
+		long blue = 0;
+		long count = 0;
+
+		for (int y = 0; y < image.getHeight(); y++) {
+			for (int x = 0; x < image.getWidth(); x++) {
+				Color pixel = new Color(image.getRGB(x, y));
+
+				red += pixel.getRed();
+				green += pixel.getGreen();
+				blue += pixel.getBlue();
+
+				count++;
+			}
+		}
+
+		return (new Color((int) (red / count), (int) (green / count), (int) (blue / count))).getRGB();
+	}
+
+	/**
 	 * Application single entry point method.
 	 * 
 	 * @param args
@@ -44,10 +72,16 @@ public class Main {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, output.getWidth(), output.getHeight());
 
-		for (int[] symbol : coordinates) {
-			// symbol[0], symbol[1], symbol[2] - symbol[0] + 1, symbol[3] - symbol[1] + 1
-			g.drawImage(input, symbol[0], symbol[1], symbol[2], symbol[3], symbol[0], symbol[1], symbol[2], symbol[3],
-					null);
+		for (int[] corners : coordinates) {
+			BufferedImage symbol = ((BufferedImage) input).getSubimage(corners[0], corners[1],
+					corners[2] - corners[0] + 1, corners[3] - corners[1] + 1);
+
+			g.setColor(new Color(averageColor(symbol)));
+			g.fillRect(corners[0], corners[1], corners[2] - corners[0] + 1, corners[3] - corners[1] + 1);
+
+			// g.drawImage(input, corners[0], corners[1], corners[2],
+			// corners[3], corners[0], corners[1], corners[2],
+			// corners[3], null);
 		}
 
 		ImageIO.write((RenderedImage) output, "png", new File("./dat/example00001.png"));
