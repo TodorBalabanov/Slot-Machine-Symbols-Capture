@@ -41,11 +41,13 @@ public class Main {
 
 		Graphics g = output.getGraphics();
 
-		g.drawImage(input, 0, 0, null);
-
 		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, output.getWidth(), output.getHeight());
+
 		for (int[] symbol : coordinates) {
-			g.fillRect(symbol[0], symbol[1], symbol[2] - symbol[0] + 1, symbol[3] - symbol[1] + 1);
+			// symbol[0], symbol[1], symbol[2] - symbol[0] + 1, symbol[3] - symbol[1] + 1
+			g.drawImage(input, symbol[0], symbol[1], symbol[2], symbol[3], symbol[0], symbol[1], symbol[2], symbol[3],
+					null);
 		}
 
 		ImageIO.write((RenderedImage) output, "png", new File("./dat/example00001.png"));
