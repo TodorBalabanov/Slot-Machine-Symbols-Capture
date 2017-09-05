@@ -19,8 +19,9 @@ public class Main {
 	/**
 	 * Symbol names.
 	 */
-	private static final String[] SYMBOLS = {"Dollar", "Apple", "Bannana", "Plum", "Cherry", "Grape", "Bar", "Seven", "Wild"};
-	
+	private static final String[] SYMBOLS = { "Dollar", "Apple", "Bannana", "Plum", "Cherry", "Grape", "Bar", "Seven",
+			"Wild" };
+
 	/**
 	 * Symbols coordinates.
 	 */
@@ -112,14 +113,20 @@ public class Main {
 	 *             Image file problem.
 	 */
 	public static void main(String[] args) throws IOException {
-		System.out.println(Arrays.deepToString(captureSymbols("./dat/00001.png", "./dat/example00001.png",
-				new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } })));
-		System.out.println(Arrays.deepToString(captureSymbols("./dat/00002.png", "./dat/example00002.png",
-				new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } })));
-		System.out.println(Arrays.deepToString(captureSymbols("./dat/00003.png", "./dat/example00003.png",
-				new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } })));
-		System.out.println(Arrays.deepToString(captureSymbols("./dat/00004.png", "./dat/example00004.png",
-				new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } })));
+		for (File file : (new File("./dat")).listFiles()) {
+			if (file.isFile() == false) {
+				continue;
+			}
+
+			if (file.getName().contains(".png") == false) {
+				continue;
+			}
+
+			System.out.println(Arrays.deepToString(captureSymbols(file.getPath(),
+					file.getPath().substring(0, file.getPath().length() - file.getName().length()) + "result"
+							+ file.getName(),
+					new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } })));
+		}
 	}
 
 }
