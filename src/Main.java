@@ -1,8 +1,6 @@
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,10 +15,87 @@ import javax.imageio.ImageIO;
 public class Main {
 
 	/**
-	 * Symbol names.
+	 * Symbol info.
 	 */
-	private static final String[] SYMBOLS = { "Dollar", "Apple", "Bannana", "Plum", "Cherry", "Grape", "Bar", "Seven",
-			"Wild" };
+	private static enum Symbol {
+		DOLLAR("Dollar", "d"), APPLE("Apple", "a"), BANNANA("Bannana", "n"), PLUM("Plum", "p"), CHERRY("Cherry",
+				"c"), GRAPE("Grape", "g"), BAR("Bar", "b"), SEVEN("Seven", "s"), WILD("Wild", "w");
+
+		/**
+		 * Symbol name.
+		 */
+		private String title;
+
+		/**
+		 * Letter used for the symbol.
+		 */
+		private String letter;
+
+		/**
+		 * Title factory function.
+		 * 
+		 * @param title
+		 *            Symbol name.
+		 * @return Symbol enumeration.
+		 */
+		public static Symbol title(String title) {
+			for (Symbol value : values()) {
+				if (value.name().equals(title)) {
+					return value;
+				}
+			}
+
+			return null;
+		}
+
+		/**
+		 * Letter factory function.
+		 * 
+		 * @param letter
+		 *            Symbol letter.
+		 * @return Symbol enumeration.
+		 */
+		public Symbol letter(String letter) {
+			for (Symbol value : values()) {
+				if (value.letter().equals(letter)) {
+					return value;
+				}
+			}
+
+			return null;
+		}
+
+		/**
+		 * Constructor with all parameters.
+		 * 
+		 * @param title
+		 *            Symbol name.
+		 * @param letter
+		 *            Symbol letter.
+		 */
+		Symbol(String title, String letter) {
+			this.title = title;
+			this.letter = letter;
+		}
+
+		/**
+		 * Symbol name getter.
+		 * 
+		 * @return Symbol name.
+		 */
+		public String title() {
+			return title;
+		}
+
+		/**
+		 * Symbol letter getter.
+		 * 
+		 * @return Symbol letter.
+		 */
+		public String letter() {
+			return letter;
+		}
+	}
 
 	/**
 	 * Symbols coordinates.
@@ -71,14 +146,6 @@ public class Main {
 	 */
 	private static int[][] captureSymbols(String file, String result, int[][] indices) throws IOException {
 		Image input = ImageIO.read(new File(file));
-		// BufferedImage output = new BufferedImage(input.getWidth(null),
-		// input.getHeight(null),
-		// BufferedImage.TYPE_INT_RGB);
-		//
-		// Graphics g = output.getGraphics();
-		//
-		// g.setColor(Color.BLACK);
-		// g.fillRect(0, 0, output.getWidth(), output.getHeight());
 
 		int i = 0, j = 0;
 		for (int[] corners : COORDINATES) {
@@ -87,18 +154,12 @@ public class Main {
 
 			indices[i][j] = averageColor(symbol);
 
-			// g.setColor(new Color(indices[i][j]));
-			// g.fillRect(corners[0], corners[1], corners[2] - corners[0] + 1,
-			// corners[3] - corners[1] + 1);
-
 			j++;
 			if (j >= indices[i].length) {
 				i++;
 				j = 0;
 			}
 		}
-
-		// ImageIO.write((RenderedImage) output, "png", new File(result));
 
 		return indices;
 	}
