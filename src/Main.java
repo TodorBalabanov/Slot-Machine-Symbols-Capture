@@ -1,6 +1,8 @@
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,116 +17,42 @@ import javax.imageio.ImageIO;
 public class Main {
 
 	/**
-	 * Symbol info.
+	 * Margin from the vertical borders.
 	 */
-	private static enum Symbol {
-		DOLLAR("Dollar", "d"), APPLE("Apple", "a"), BANNANA("Bannana", "n"), PLUM("Plum", "p"), CHERRY("Cherry",
-				"c"), GRAPE("Grape", "g"), BAR("Bar", "b"), SEVEN("Seven", "s"), WILD("Wild", "w");
-
-		/**
-		 * Symbol name.
-		 */
-		private String title;
-
-		/**
-		 * Letter used for the symbol.
-		 */
-		private String letter;
-
-		/**
-		 * Title factory function.
-		 * 
-		 * @param title
-		 *            Symbol name.
-		 * @return Symbol enumeration.
-		 */
-		public static Symbol title(String title) {
-			for (Symbol value : values()) {
-				if (value.name().equals(title)) {
-					return value;
-				}
-			}
-
-			return null;
-		}
-
-		/**
-		 * Letter factory function.
-		 * 
-		 * @param letter
-		 *            Symbol letter.
-		 * @return Symbol enumeration.
-		 */
-		public Symbol letter(String letter) {
-			for (Symbol value : values()) {
-				if (value.letter().equals(letter)) {
-					return value;
-				}
-			}
-
-			return null;
-		}
-
-		/**
-		 * Constructor with all parameters.
-		 * 
-		 * @param title
-		 *            Symbol name.
-		 * @param letter
-		 *            Symbol letter.
-		 */
-		Symbol(String title, String letter) {
-			this.title = title;
-			this.letter = letter;
-		}
-
-		/**
-		 * Symbol name getter.
-		 * 
-		 * @return Symbol name.
-		 */
-		public String title() {
-			return title;
-		}
-
-		/**
-		 * Symbol letter getter.
-		 * 
-		 * @return Symbol letter.
-		 */
-		public String letter() {
-			return letter;
-		}
-	}
+	private static final int X_MAGIN = 30;
 
 	/**
-	 * Margin from the borders.
+	 * Margin from the horizontal borders.
 	 */
-	private static final int MAGIN = 30;
+	private static final int Y_MAGIN = 10;
 
 	/**
 	 * Symbols coordinates.
 	 */
-	private static final int COORDINATES[][] = { { 126 + MAGIN, 190 + MAGIN, 314 - MAGIN, 330 - MAGIN },
-			{ 336 + MAGIN, 190 + MAGIN, 524 - MAGIN, 330 - MAGIN },
-			{ 546 + MAGIN, 190 + MAGIN, 734 - MAGIN, 330 - MAGIN },
-			{ 756 + MAGIN, 190 + MAGIN, 944 - MAGIN, 330 - MAGIN },
-			{ 966 + MAGIN, 190 + MAGIN, 1154 - MAGIN, 330 - MAGIN },
-			{ 126 + MAGIN, 332 + MAGIN, 314 - MAGIN, 472 - MAGIN },
-			{ 336 + MAGIN, 332 + MAGIN, 524 - MAGIN, 472 - MAGIN },
-			{ 546 + MAGIN, 332 + MAGIN, 734 - MAGIN, 472 - MAGIN },
-			{ 756 + MAGIN, 332 + MAGIN, 944 - MAGIN, 472 - MAGIN },
-			{ 966 + MAGIN, 332 + MAGIN, 1154 - MAGIN, 472 - MAGIN },
-			{ 126 + MAGIN, 474 + MAGIN, 314 - MAGIN, 614 - MAGIN },
-			{ 336 + MAGIN, 474 + MAGIN, 524 - MAGIN, 614 - MAGIN },
-			{ 546 + MAGIN, 474 + MAGIN, 734 - MAGIN, 614 - MAGIN },
-			{ 756 + MAGIN, 474 + MAGIN, 944 - MAGIN, 614 - MAGIN },
-			{ 966 + MAGIN, 474 + MAGIN, 1154 - MAGIN, 614 - MAGIN },
-			{ 126 + MAGIN, 616 + MAGIN, 314 - MAGIN, 756 - MAGIN },
-			{ 336 + MAGIN, 616 + MAGIN, 524 - MAGIN, 756 - MAGIN },
-			{ 546 + MAGIN, 616 + MAGIN, 734 - MAGIN, 756 - MAGIN },
-			{ 756 + MAGIN, 616 + MAGIN, 944 - MAGIN, 756 - MAGIN },
-			{ 966 + MAGIN, 616 + MAGIN, 1154 - MAGIN, 756 - MAGIN }, };
+	private static final int COORDINATES[][] = {
+
+			{ 126 + X_MAGIN, 190 + Y_MAGIN, 314 - X_MAGIN, 330 - Y_MAGIN },
+			{ 336 + X_MAGIN, 190 + Y_MAGIN, 524 - X_MAGIN, 330 - Y_MAGIN },
+			{ 546 + X_MAGIN, 190 + Y_MAGIN, 734 - X_MAGIN, 330 - Y_MAGIN },
+			{ 756 + X_MAGIN, 190 + Y_MAGIN, 944 - X_MAGIN, 330 - Y_MAGIN },
+			{ 966 + X_MAGIN, 190 + Y_MAGIN, 1154 - X_MAGIN, 330 - Y_MAGIN },
+			{ 126 + X_MAGIN, 332 + Y_MAGIN, 314 - X_MAGIN, 472 - Y_MAGIN },
+			{ 336 + X_MAGIN, 332 + Y_MAGIN, 524 - X_MAGIN, 472 - Y_MAGIN },
+			{ 546 + X_MAGIN, 332 + Y_MAGIN, 734 - X_MAGIN, 472 - Y_MAGIN },
+			{ 756 + X_MAGIN, 332 + Y_MAGIN, 944 - X_MAGIN, 472 - Y_MAGIN },
+			{ 966 + X_MAGIN, 332 + Y_MAGIN, 1154 - X_MAGIN, 472 - Y_MAGIN },
+			{ 126 + X_MAGIN, 474 + Y_MAGIN, 314 - X_MAGIN, 614 - Y_MAGIN },
+			{ 336 + X_MAGIN, 474 + Y_MAGIN, 524 - X_MAGIN, 614 - Y_MAGIN },
+			{ 546 + X_MAGIN, 474 + Y_MAGIN, 734 - X_MAGIN, 614 - Y_MAGIN },
+			{ 756 + X_MAGIN, 474 + Y_MAGIN, 944 - X_MAGIN, 614 - Y_MAGIN },
+			{ 966 + X_MAGIN, 474 + Y_MAGIN, 1154 - X_MAGIN, 614 - Y_MAGIN },
+			{ 126 + X_MAGIN, 616 + Y_MAGIN, 314 - X_MAGIN, 756 - Y_MAGIN },
+			{ 336 + X_MAGIN, 616 + Y_MAGIN, 524 - X_MAGIN, 756 - Y_MAGIN },
+			{ 546 + X_MAGIN, 616 + Y_MAGIN, 734 - X_MAGIN, 756 - Y_MAGIN },
+			{ 756 + X_MAGIN, 616 + Y_MAGIN, 944 - X_MAGIN, 756 - Y_MAGIN },
+			{ 966 + X_MAGIN, 616 + Y_MAGIN, 1154 - X_MAGIN, 756 - Y_MAGIN },
+
+	};
 
 	/**
 	 * Calculate average color for the image.
@@ -268,12 +196,24 @@ public class Main {
 	private static int[][] captureSymbols(String file, String result, int[][] indices) throws IOException {
 		Image input = ImageIO.read(new File(file));
 
+		BufferedImage output = new BufferedImage(input.getWidth(null), input.getHeight(null),
+				BufferedImage.TYPE_INT_RGB);
+
+		Graphics g = output.getGraphics();
+
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, output.getWidth(), output.getHeight());
+
 		int i = 0, j = 0;
 		for (int[] corners : COORDINATES) {
 			BufferedImage symbol = ((BufferedImage) input).getSubimage(corners[0], corners[1],
 					corners[2] - corners[0] + 1, corners[3] - corners[1] + 1);
 
+			// TODO Histogram should be used.
 			indices[i][j] = averageColor5(symbol);
+
+			g.drawImage(input, corners[0], corners[1], corners[2], corners[3], corners[0], corners[1], corners[2],
+					corners[3], null);
 
 			j++;
 			if (j >= indices[i].length) {
@@ -281,6 +221,8 @@ public class Main {
 				j = 0;
 			}
 		}
+
+		ImageIO.write((RenderedImage) output, "png", new File(result));
 
 		return indices;
 	}
