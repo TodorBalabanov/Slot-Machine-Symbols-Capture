@@ -1,10 +1,18 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 /**
  * Symbol info.
  */
 enum Symbol {
-	DOLLAR("Dollar", "d"), APPLE("Apple", "a"), BANNANA("Bannana", "n"), PLUM("Plum", "p"), CHERRY("Cherry",
-			"c"), GRAPE("Grape", "g"), BAR("Bar", "b"), SEVEN("Seven", "s"), WILD("Wild", "w");
+	DOLLAR("Dollar", "d", "./dat/samples/dollar.png"), APPLE("Apple", "a", "./dat/samples/apple.png"), BANNANA(
+			"Bannana", "n", "./dat/samples/bannana.png"), PLUM("Plum", "p", "./dat/samples/plum.png"), CHERRY("Cherry",
+					"c", "./dat/samples/cherry.png"), GRAPE("Grape", "g", "./dat/samples/grape.png"), BAR("Bar", "b",
+							"./dat/samples/bar.png"), SEVEN("Seven", "s",
+									"./dat/samples/seven.png"), WILD("Wild", "w", "./dat/samples/wild.png");
 
 	/**
 	 * Symbol name.
@@ -15,6 +23,11 @@ enum Symbol {
 	 * Letter used for the symbol.
 	 */
 	private String letter;
+
+	/**
+	 * Bitmap image sample.
+	 */
+	BufferedImage sample;
 
 	/**
 	 * Title factory function.
@@ -58,9 +71,14 @@ enum Symbol {
 	 * @param letter
 	 *            Symbol letter.
 	 */
-	Symbol(String title, String letter) {
+	Symbol(String title, String letter, String file) {
 		this.title = title;
 		this.letter = letter;
+		try {
+			this.sample = ImageIO.read(new File(file));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

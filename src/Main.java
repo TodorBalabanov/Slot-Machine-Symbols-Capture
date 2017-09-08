@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,6 @@ import javax.imageio.ImageIO;
  * @author Todor Balabanov
  */
 public class Main {
-
 	/**
 	 * Margin from the vertical borders.
 	 */
@@ -53,6 +53,35 @@ public class Main {
 			{ 966 + X_MAGIN, 616 + Y_MAGIN, 1154 - X_MAGIN, 756 - Y_MAGIN },
 
 	};
+
+	/**
+	 * Compare two images for similarity.
+	 * 
+	 * @param image1
+	 *            First image.
+	 * @param image2
+	 *            Second image.
+	 * 
+	 * @return Similarity as weighted difference number. It it is zero the
+	 *         images are identical.
+	 */
+	public double compare(BufferedImage image1, BufferedImage image2) {
+		DataBuffer buffer1 = image1.getData().getDataBuffer();
+		int size = buffer1.getSize();
+
+		DataBuffer buffer2 = image2.getData().getDataBuffer();
+		if (size != buffer2.getSize()) {
+			throw new RuntimeException(
+					String.format("Size of the images is different: %d <> %d !", size, buffer2.getSize()));
+		}
+
+		double sum = 0;
+		for (int i = 0; i < size; i++) {
+			sum += Math.abs(buffer1.getElem(i) - buffer2.getElem(i));
+		}
+
+		return sum / size;
+	}
 
 	/**
 	 * Calculate average color for the image.
