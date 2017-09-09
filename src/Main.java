@@ -280,7 +280,12 @@ public class Main {
 			System.err.println(Arrays.deepToString(view));
 		}
 
-		System.out.println(Arrays.deepToString(pieces));
+		/*
+		 * Report final result.
+		 */
+		for (String value : pieces) {
+			System.out.println(value);
+		}
 	}
 
 }
