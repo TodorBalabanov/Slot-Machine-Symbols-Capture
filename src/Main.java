@@ -185,46 +185,58 @@ public class Main {
 	}
 
 	/**
-	 * Capture symbols in particular image.
+	 * Calculate similarity with predefined samples.
+	 * 
+	 * @param image
+	 *            Image as input.
+	 * @return Letter of the most similar symbol.
+	 */
+	private static String similarity(BufferedImage image) {
+		return Symbol.sample(image).letter();
+	}
+
+	/**
 	 * 
 	 * @param file
-	 *            Full file path and name.
-	 * 
+	 *            Full input image file path and name.
+	 * @param result
+	 *            Name of the result file if images are stored as output.
+	 * @param letters
+	 *            The letters of the symbols on the screen.
+	 * @return Reference to the array with the letters on the screen.
 	 * @throws IOException
 	 *             Exception if there is a problem with the file.
 	 */
-	private static int[][] captureSymbols(String file, String result, int[][] indices) throws IOException {
-		Image input = ImageIO.read(new File(file));
+	private static String[][] captureSymbols(String file, String result, String[][] letters) throws IOException {
+		BufferedImage input = ImageIO.read(new File(file));
 
-		BufferedImage output = new BufferedImage(input.getWidth(null), input.getHeight(null),
-				BufferedImage.TYPE_INT_RGB);
-
-		Graphics g = output.getGraphics();
-
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, output.getWidth(), output.getHeight());
+		// BufferedImage output = new BufferedImage(input.getWidth(null),
+		// input.getHeight(null), input.getType());
+		// Graphics g = output.getGraphics();
+		// g.setColor(Color.BLACK);
+		// g.fillRect(0, 0, output.getWidth(), output.getHeight());
 
 		int i = 0, j = 0;
 		for (int[] corners : COORDINATES) {
-			BufferedImage symbol = ((BufferedImage) input).getSubimage(corners[0], corners[1],
-					corners[2] - corners[0] + 1, corners[3] - corners[1] + 1);
+			BufferedImage symbol = ((BufferedImage) input).getSubimage(corners[0], corners[1], corners[2] - corners[0],
+					corners[3] - corners[1]);
 
-			// TODO Histogram should be used.
-			indices[i][j] = averageColor5(symbol);
+			letters[i][j] = "" + similarity(symbol);
 
-			g.drawImage(input, corners[0], corners[1], corners[2], corners[3], corners[0], corners[1], corners[2],
-					corners[3], null);
+			// g.drawImage(input, corners[0], corners[1], corners[2], corners[3],
+			// corners[0], corners[1], corners[2],
+			// corners[3], null);
 
 			j++;
-			if (j >= indices[i].length) {
+			if (j >= letters[i].length) {
 				i++;
 				j = 0;
 			}
 		}
 
-		ImageIO.write((RenderedImage) output, "png", new File(result));
+		// ImageIO.write((RenderedImage) output, "png", new File(result));
 
-		return indices;
+		return letters;
 	}
 
 	/**
@@ -249,7 +261,8 @@ public class Main {
 			System.out.println(Arrays.deepToString(captureSymbols(file.getPath(),
 					file.getPath().substring(0, file.getPath().length() - file.getName().length()) + "result"
 							+ file.getName(),
-					new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } })));
+					new String[][] { { "", "", "", "", "" }, { "", "", "", "", "" }, { "", "", "", "", "" },
+							{ "", "", "", "", "" } })));
 		}
 	}
 

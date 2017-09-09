@@ -9,11 +9,26 @@ import javax.imageio.ImageIO;
  * Symbol info.
  */
 enum Symbol {
-	DOLLAR("Dollar", "d", "./dat/samples/dollar.png"), APPLE("Apple", "a", "./dat/samples/apple.png"), BANNANA(
-			"Bannana", "n", "./dat/samples/bannana.png"), PLUM("Plum", "p", "./dat/samples/plum.png"), CHERRY("Cherry",
-					"c", "./dat/samples/cherry.png"), GRAPE("Grape", "g", "./dat/samples/grape.png"), BAR("Bar", "b",
-							"./dat/samples/bar.png"), SEVEN("Seven", "s",
-									"./dat/samples/seven.png"), WILD("Wild", "w", "./dat/samples/wild.png");
+	
+	DOLLAR("Dollar", "d", "./dat/samples/dollar.png"),
+
+	APPLE("Apple", "a", "./dat/samples/apple.png"),
+
+	BANNANA("Bannana", "n", "./dat/samples/bannana.png"),
+
+	PLUM("Plum", "p", "./dat/samples/plum.png"),
+
+	CHERRY("Cherry", "c", "./dat/samples/cherry.png"),
+
+	GRAPE("Grape", "g", "./dat/samples/grape.png"),
+
+	BAR("Bar", "b", "./dat/samples/bar.png"),
+
+	SEVEN("Seven", "s", "./dat/samples/seven.png"),
+
+	WATERMELON("Watermelon", "m", "./dat/samples/watermelon.png"),
+
+	WILD("Wild", "w", "./dat/samples/wild.png");
 
 	/**
 	 * Symbol name.
@@ -42,18 +57,35 @@ enum Symbol {
 	 *         are identical.
 	 */
 	private static double compare(BufferedImage image1, BufferedImage image2) {
-		DataBuffer buffer1 = image1.getData().getDataBuffer();
-		int size = buffer1.getSize();
+		// DataBuffer buffer1 = image1.getData().getDataBuffer();
+		// int size = buffer1.getSize();
+		//
+		// DataBuffer buffer2 = image2.getData().getDataBuffer();
+		// if (size != buffer2.getSize()) {
+		// throw new RuntimeException(
+		// String.format("Size of the images is different: %d <> %d !", size,
+		// buffer2.getSize()));
+		// }
+		//
+		// double sum = 0;
+		// for (int i = 0; i < size; i++) {
+		// sum += Math.abs(buffer1.getElem(i) - buffer2.getElem(i));
+		// }
 
-		DataBuffer buffer2 = image2.getData().getDataBuffer();
-		if (size != buffer2.getSize()) {
-			throw new RuntimeException(
-					String.format("Size of the images is different: %d <> %d !", size, buffer2.getSize()));
+		if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) {
+			throw new RuntimeException(String.format("Size of the images is different: [%d,%d] <> [%d,%d] !",
+					image1.getWidth(), image1.getHeight(), image2.getWidth(), image2.getHeight()));
 		}
 
+		int buffer1[] = new int[image1.getWidth() * image1.getHeight()];
+		image1.getRGB(0, 0, image1.getWidth(), image1.getHeight(), buffer1, 0, image1.getWidth());
+		int buffer2[] = new int[image2.getWidth() * image2.getHeight()];
+		image2.getRGB(0, 0, image2.getWidth(), image2.getHeight(), buffer2, 0, image2.getWidth());
+
 		double sum = 0;
+		int size = Math.min(buffer1.length, buffer2.length);
 		for (int i = 0; i < size; i++) {
-			sum += Math.abs(buffer1.getElem(i) - buffer2.getElem(i));
+			sum += Math.abs((buffer1[i] & 0xFFFFFF) - (buffer2[i] & 0xFFFFFF));
 		}
 
 		return sum / size;
@@ -86,7 +118,7 @@ enum Symbol {
 	public static Symbol sample(BufferedImage image) {
 		Symbol result = values()[0];
 		double min = compare(values()[0].sample, image);
-		//TODO Regular for will do one comparison less.
+		// TODO Regular for will do one comparison less.
 		for (Symbol value : values()) {
 			double similarity = compare(value.sample, image);
 			if (min > similarity) {
