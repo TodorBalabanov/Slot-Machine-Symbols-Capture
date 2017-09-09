@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
 
@@ -27,7 +28,36 @@ enum Symbol {
 	/**
 	 * Bitmap image sample.
 	 */
-	BufferedImage sample;
+	private BufferedImage sample;
+
+	/**
+	 * Compare two images for similarity.
+	 * 
+	 * @param image1
+	 *            First image.
+	 * @param image2
+	 *            Second image.
+	 * 
+	 * @return Similarity as weighted difference number. It it is zero the images
+	 *         are identical.
+	 */
+	private static double compare(BufferedImage image1, BufferedImage image2) {
+		DataBuffer buffer1 = image1.getData().getDataBuffer();
+		int size = buffer1.getSize();
+
+		DataBuffer buffer2 = image2.getData().getDataBuffer();
+		if (size != buffer2.getSize()) {
+			throw new RuntimeException(
+					String.format("Size of the images is different: %d <> %d !", size, buffer2.getSize()));
+		}
+
+		double sum = 0;
+		for (int i = 0; i < size; i++) {
+			sum += Math.abs(buffer1.getElem(i) - buffer2.getElem(i));
+		}
+
+		return sum / size;
+	}
 
 	/**
 	 * Title factory function.
@@ -47,13 +77,35 @@ enum Symbol {
 	}
 
 	/**
+	 * Sample factory function.
+	 * 
+	 * @param image
+	 *            Symbol letter.
+	 * @return Symbol enumeration.
+	 */
+	public static Symbol sample(BufferedImage image) {
+		Symbol result = values()[0];
+		double min = compare(values()[0].sample, image);
+		//TODO Regular for will do one comparison less.
+		for (Symbol value : values()) {
+			double similarity = compare(value.sample, image);
+			if (min > similarity) {
+				min = similarity;
+				result = value;
+			}
+		}
+
+		return result;
+	}
+
+	/**
 	 * Letter factory function.
 	 * 
 	 * @param letter
 	 *            Symbol letter.
 	 * @return Symbol enumeration.
 	 */
-	public Symbol letter(String letter) {
+	public static Symbol letter(String letter) {
 		for (Symbol value : values()) {
 			if (value.letter().equals(letter)) {
 				return value;
