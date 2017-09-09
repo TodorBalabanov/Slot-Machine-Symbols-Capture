@@ -242,6 +242,10 @@ public class Main {
 	/**
 	 * Application single entry point method.
 	 * 
+	 * Command which can be used to start the application:
+	 * 
+	 * java -cp ./bin/ Main >./bin/out.txt & disown
+	 * 
 	 * @param args
 	 *            Command line arguments.
 	 * 
@@ -249,6 +253,9 @@ public class Main {
 	 *             Image file problem.
 	 */
 	public static void main(String[] args) throws IOException {
+		String pieces[] = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+				"", "" };
+
 		for (File file : (new File("./dat")).listFiles()) {
 			if (file.isFile() == false) {
 				continue;
@@ -258,12 +265,22 @@ public class Main {
 				continue;
 			}
 
-			System.out.println(Arrays.deepToString(captureSymbols(file.getPath(),
+			String[][] view = captureSymbols(file.getPath(),
 					file.getPath().substring(0, file.getPath().length() - file.getName().length()) + "result"
 							+ file.getName(),
 					new String[][] { { "", "", "", "", "" }, { "", "", "", "", "" }, { "", "", "", "", "" },
-							{ "", "", "", "", "" } })));
+							{ "", "", "", "", "" } });
+
+			for (int j = 0; j < view[0].length; j++) {
+				for (int i = 0; i < view.length; i++) {
+					pieces[i + 5 * j] += view[i][j] + "\t";
+				}
+			}
+
+			System.err.println(Arrays.deepToString(view));
 		}
+
+		System.out.println(Arrays.deepToString(pieces));
 	}
 
 }
