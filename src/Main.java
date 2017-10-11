@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,38 +17,68 @@ public class Main {
 	/**
 	 * Margin from the vertical borders.
 	 */
-	private static final int X_MARGIN = 0;
+	private static final int X_MARGIN = 15;
 
 	/**
 	 * Margin from the horizontal borders.
 	 */
-	private static final int Y_MARGIN = 0;
+	private static final int Y_MARGIN = 10;
 
+	/**
+	 * X coordinate of the top left symbol.
+	 */
+	private static final int X_INITIAL = 3;
+
+	/**
+	 * Y coordinate of the top left symbol.
+	 */
+	private static final int Y_INITIAL = 4;
+
+	/**
+	 * X to the next symbol.
+	 */
+	private static final int X_OFFSET = 116;
+
+	/**
+	 * Y to the next symbol.
+	 */
+	private static final int Y_OFFSET = 80;
+
+	/**
+	 * X size of the symbol.
+	 */
+	private static final int X_SIZE = 104;
+
+	/**
+	 * Y size of the symbol.
+	 */
+	private static final int Y_SIZE = 80;
+	
 	/**
 	 * Symbols coordinates.
 	 */
 	private static final int COORDINATES[][] = {
 
-			{ 126 + X_MARGIN, 190 + Y_MARGIN, 314 - X_MARGIN, 330 - Y_MARGIN },
-			{ 336 + X_MARGIN, 190 + Y_MARGIN, 524 - X_MARGIN, 330 - Y_MARGIN },
-			{ 546 + X_MARGIN, 190 + Y_MARGIN, 734 - X_MARGIN, 330 - Y_MARGIN },
-			{ 756 + X_MARGIN, 190 + Y_MARGIN, 944 - X_MARGIN, 330 - Y_MARGIN },
-			{ 966 + X_MARGIN, 190 + Y_MARGIN, 1154 - X_MARGIN, 330 - Y_MARGIN },
-			{ 126 + X_MARGIN, 332 + Y_MARGIN, 314 - X_MARGIN, 472 - Y_MARGIN },
-			{ 336 + X_MARGIN, 332 + Y_MARGIN, 524 - X_MARGIN, 472 - Y_MARGIN },
-			{ 546 + X_MARGIN, 332 + Y_MARGIN, 734 - X_MARGIN, 472 - Y_MARGIN },
-			{ 756 + X_MARGIN, 332 + Y_MARGIN, 944 - X_MARGIN, 472 - Y_MARGIN },
-			{ 966 + X_MARGIN, 332 + Y_MARGIN, 1154 - X_MARGIN, 472 - Y_MARGIN },
-			{ 126 + X_MARGIN, 474 + Y_MARGIN, 314 - X_MARGIN, 614 - Y_MARGIN },
-			{ 336 + X_MARGIN, 474 + Y_MARGIN, 524 - X_MARGIN, 614 - Y_MARGIN },
-			{ 546 + X_MARGIN, 474 + Y_MARGIN, 734 - X_MARGIN, 614 - Y_MARGIN },
-			{ 756 + X_MARGIN, 474 + Y_MARGIN, 944 - X_MARGIN, 614 - Y_MARGIN },
-			{ 966 + X_MARGIN, 474 + Y_MARGIN, 1154 - X_MARGIN, 614 - Y_MARGIN },
-			{ 126 + X_MARGIN, 616 + Y_MARGIN, 314 - X_MARGIN, 756 - Y_MARGIN },
-			{ 336 + X_MARGIN, 616 + Y_MARGIN, 524 - X_MARGIN, 756 - Y_MARGIN },
-			{ 546 + X_MARGIN, 616 + Y_MARGIN, 734 - X_MARGIN, 756 - Y_MARGIN },
-			{ 756 + X_MARGIN, 616 + Y_MARGIN, 944 - X_MARGIN, 756 - Y_MARGIN },
-			{ 966 + X_MARGIN, 616 + Y_MARGIN, 1154 - X_MARGIN, 756 - Y_MARGIN },
+			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
 
 	};
 
@@ -333,7 +361,7 @@ public class Main {
 	 *             Image file problem.
 	 */
 	public static void main(String[] args) throws IOException {
-		samples();
+		// samples();
 		// process();
 	}
 
