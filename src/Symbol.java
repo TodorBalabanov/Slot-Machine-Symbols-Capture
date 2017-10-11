@@ -10,25 +10,25 @@ import javax.imageio.ImageIO;
  */
 enum Symbol {
 	
-	DOLLAR("Dollar", "d", "./dat/samples/dollar.png"),
+	DOLLAR("Dollar", "d", "./data/samples/dollar.png"),
 
-	APPLE("Apple", "a", "./dat/samples/apple.png"),
+	APPLE("Apple", "a", "./data/samples/apple.png"),
 
-	BANNANA("Bannana", "n", "./dat/samples/bannana.png"),
+	BANNANA("Bannana", "n", "./data/samples/bannana.png"),
 
-	PLUM("Plum", "p", "./dat/samples/plum.png"),
+	PLUM("Plum", "p", "./data/samples/plum.png"),
 
-	CHERRY("Cherry", "c", "./dat/samples/cherry.png"),
+	CHERRY("Cherry", "c", "./data/samples/cherry.png"),
 
-	GRAPE("Grape", "g", "./dat/samples/grape.png"),
+	GRAPE("Grape", "g", "./data/samples/grape.png"),
 
-	BAR("Bar", "b", "./dat/samples/bar.png"),
+	BAR("Bar", "b", "./data/samples/bar.png"),
 
-	SEVEN("Seven", "s", "./dat/samples/seven.png"),
+	SEVEN("Seven", "s", "./data/samples/seven.png"),
 
-	WATERMELON("Watermelon", "m", "./dat/samples/watermelon.png"),
+	WATERMELON("Watermelon", "m", "./data/samples/watermelon.png"),
 
-	WILD("Wild", "w", "./dat/samples/wild.png");
+	WILD("Wild", "w", "./data/samples/wild.png");
 
 	/**
 	 * Symbol name.
@@ -57,21 +57,6 @@ enum Symbol {
 	 *         are identical.
 	 */
 	private static double compare(BufferedImage image1, BufferedImage image2) {
-		// DataBuffer buffer1 = image1.getData().getDataBuffer();
-		// int size = buffer1.getSize();
-		//
-		// DataBuffer buffer2 = image2.getData().getDataBuffer();
-		// if (size != buffer2.getSize()) {
-		// throw new RuntimeException(
-		// String.format("Size of the images is different: %d <> %d !", size,
-		// buffer2.getSize()));
-		// }
-		//
-		// double sum = 0;
-		// for (int i = 0; i < size; i++) {
-		// sum += Math.abs(buffer1.getElem(i) - buffer2.getElem(i));
-		// }
-
 		if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) {
 			throw new RuntimeException(String.format("Size of the images is different: [%d,%d] <> [%d,%d] !",
 					image1.getWidth(), image1.getHeight(), image2.getWidth(), image2.getHeight()));

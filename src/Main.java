@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -14,6 +15,11 @@ import javax.imageio.ImageIO;
  * @author Todor Balabanov
  */
 public class Main {
+	/**
+	 * Spinning mode text image sample.
+	 */
+	private static BufferedImage SPIN_TEXT = null;
+
 	/**
 	 * Margin from the vertical borders.
 	 */
@@ -53,163 +59,63 @@ public class Main {
 	 * Y size of the symbol.
 	 */
 	private static final int Y_SIZE = 80;
-	
+
 	/**
 	 * Symbols coordinates.
 	 */
 	private static final int COORDINATES[][] = {
 
-			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 0*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 0*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 1*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 1*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 2*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 2*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 0*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 0*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 1*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 1*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 2*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 2*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 3*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 3*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
-			{ 4*X_OFFSET+ X_INITIAL + X_MARGIN, 3*Y_OFFSET+ Y_INITIAL + Y_MARGIN, 4*X_OFFSET+X_SIZE+ X_INITIAL - X_MARGIN, 3*Y_OFFSET+Y_SIZE+ Y_INITIAL - Y_MARGIN },
+			{ 0 * X_OFFSET + X_INITIAL + X_MARGIN, 0 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					0 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 0 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 1 * X_OFFSET + X_INITIAL + X_MARGIN, 0 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					1 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 0 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 2 * X_OFFSET + X_INITIAL + X_MARGIN, 0 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					2 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 0 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 3 * X_OFFSET + X_INITIAL + X_MARGIN, 0 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					3 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 0 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 4 * X_OFFSET + X_INITIAL + X_MARGIN, 0 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					4 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 0 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 0 * X_OFFSET + X_INITIAL + X_MARGIN, 1 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					0 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 1 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 1 * X_OFFSET + X_INITIAL + X_MARGIN, 1 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					1 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 1 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 2 * X_OFFSET + X_INITIAL + X_MARGIN, 1 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					2 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 1 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 3 * X_OFFSET + X_INITIAL + X_MARGIN, 1 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					3 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 1 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 4 * X_OFFSET + X_INITIAL + X_MARGIN, 1 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					4 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 1 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 0 * X_OFFSET + X_INITIAL + X_MARGIN, 2 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					0 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 2 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 1 * X_OFFSET + X_INITIAL + X_MARGIN, 2 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					1 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 2 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 2 * X_OFFSET + X_INITIAL + X_MARGIN, 2 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					2 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 2 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 3 * X_OFFSET + X_INITIAL + X_MARGIN, 2 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					3 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 2 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 4 * X_OFFSET + X_INITIAL + X_MARGIN, 2 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					4 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 2 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 0 * X_OFFSET + X_INITIAL + X_MARGIN, 3 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					0 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 3 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 1 * X_OFFSET + X_INITIAL + X_MARGIN, 3 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					1 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 3 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 2 * X_OFFSET + X_INITIAL + X_MARGIN, 3 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					2 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 3 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 3 * X_OFFSET + X_INITIAL + X_MARGIN, 3 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					3 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 3 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
+			{ 4 * X_OFFSET + X_INITIAL + X_MARGIN, 3 * Y_OFFSET + Y_INITIAL + Y_MARGIN,
+					4 * X_OFFSET + X_SIZE + X_INITIAL - X_MARGIN, 3 * Y_OFFSET + Y_SIZE + Y_INITIAL - Y_MARGIN },
 
 	};
 
 	/**
-	 * Calculate average color for the image.
-	 * 
-	 * @param image
-	 *            Image as input.
-	 * @return Average color as integer value.
+	 * Static data initialization.
 	 */
-	private static int averageColor1(BufferedImage image) {
-		long red = 0;
-		long green = 0;
-		long blue = 0;
-
-		for (int y = 0; y < image.getHeight(); y++) {
-			for (int x = 0; x < image.getWidth(); x++) {
-				Color pixel = new Color(image.getRGB(x, y));
-
-				red += pixel.getRed();
-				green += pixel.getGreen();
-				blue += pixel.getBlue();
-			}
+	static {
+		try {
+			SPIN_TEXT = ImageIO.read(new File("./data/samples/spinning.png"));
+		} catch (IOException e) {
 		}
-
-		double count = image.getWidth() * image.getHeight();
-		return (new Color((int) Math.round((red / count)), (int) Math.round((green / count)),
-				(int) Math.round((blue / count)))).getRGB();
-	}
-
-	/**
-	 * Calculate average color for the image.
-	 * 
-	 * @param image
-	 *            Image as input.
-	 * @return Average color as integer value.
-	 */
-	private static int averageColor2(BufferedImage image) {
-		long sum = 0;
-
-		for (int y = 0; y < image.getHeight(); y++) {
-			for (int x = 0; x < image.getWidth(); x++) {
-				sum += image.getRGB(x, y);
-			}
-		}
-
-		return (int) (sum /= image.getWidth() * image.getHeight());
-	}
-
-	/**
-	 * Calculate average color for the image.
-	 * 
-	 * @param image
-	 *            Image as input.
-	 * @return Average color as integer value.
-	 */
-	private static int averageColor3(BufferedImage image) {
-		long red = 0;
-		long green = 0;
-		long blue = 0;
-
-		for (int y = 0; y < image.getHeight(); y++) {
-			for (int x = 0; x < image.getWidth(); x++) {
-				Color pixel = new Color(image.getRGB(x, y));
-
-				red += pixel.getRed();
-				green += pixel.getGreen();
-				blue += pixel.getBlue();
-			}
-		}
-
-		return (int) Math.round((red + green + blue) / (3D * image.getWidth() * image.getHeight()));
-	}
-
-	/**
-	 * Calculate average color for the image.
-	 * 
-	 * @param image
-	 *            Image as input.
-	 * @return Average color as integer value.
-	 */
-	private static int averageColor4(BufferedImage image) {
-		double hue = 0;
-		double saturation = 0;
-		double brightness = 0;
-
-		float hsb[] = { 0, 0, 0 };
-
-		for (int y = 0; y < image.getHeight(); y++) {
-			for (int x = 0; x < image.getWidth(); x++) {
-				Color pixel = new Color(image.getRGB(x, y));
-				Color.RGBtoHSB(pixel.getRed(), pixel.getGreen(), pixel.getBlue(), hsb);
-
-				hue += hsb[0];
-				saturation += hsb[1];
-				brightness += hsb[2];
-			}
-		}
-
-		hue /= image.getWidth() * image.getHeight();
-		saturation /= image.getWidth() * image.getHeight();
-		brightness /= image.getWidth() * image.getHeight();
-
-		return (Color.getHSBColor((float) hue, (float) saturation, (float) brightness)).getRGB();
-	}
-
-	/**
-	 * Calculate average color for the image.
-	 * 
-	 * @param image
-	 *            Image as input.
-	 * @return Average color as integer value.
-	 */
-	private static int averageColor5(BufferedImage image) {
-		long red = 0;
-		long green = 0;
-		long blue = 0;
-
-		for (int y = 0; y < image.getHeight(); y++) {
-			for (int x = 0; x < image.getWidth(); x++) {
-				Color pixel = new Color(image.getRGB(x, y));
-
-				red += pixel.getRed();
-				green += pixel.getGreen();
-				blue += pixel.getBlue();
-			}
-		}
-
-		double count = image.getWidth() * image.getHeight();
-		return 1000000 * (int) Math.round((red / count)) + 1000 * (int) Math.round((green / count))
-				+ (int) Math.round((blue / count));
 	}
 
 	/**
@@ -309,6 +215,65 @@ public class Main {
 	}
 
 	/**
+	 * Capture part of the image with spinning mode information.
+	 * 
+	 * @param file
+	 *            Image file to check.
+	 * 
+	 * @return True if it is spinning mode picture, false otherwise.
+	 * 
+	 * @throws IOException
+	 *             Procedure end if there is a input/output problem.
+	 */
+	private static boolean captureSpinMode(String file) throws IOException {
+		BufferedImage text = ((BufferedImage) ImageIO.read(new File(file))).getSubimage(245, 342, 66, 9);
+
+		if (text.getWidth() != SPIN_TEXT.getWidth() || text.getHeight() != SPIN_TEXT.getHeight()) {
+			throw new RuntimeException(String.format("Size of the images is different: [%d,%d] <> [%d,%d] !",
+					text.getWidth(), text.getHeight(), SPIN_TEXT.getWidth(), SPIN_TEXT.getHeight()));
+		}
+
+		int buffer1[] = new int[text.getWidth() * text.getHeight()];
+		text.getRGB(0, 0, text.getWidth(), text.getHeight(), buffer1, 0, text.getWidth());
+		int buffer2[] = new int[SPIN_TEXT.getWidth() * SPIN_TEXT.getHeight()];
+		SPIN_TEXT.getRGB(0, 0, SPIN_TEXT.getWidth(), SPIN_TEXT.getHeight(), buffer2, 0, SPIN_TEXT.getWidth());
+
+		double sum = 0;
+		int size = Math.min(buffer1.length, buffer2.length);
+		for (int i = 0; i < size; i++) {
+			sum += Math.abs((buffer1[i] & 0xFFFFFF) - (buffer2[i] & 0xFFFFFF));
+		}
+
+		if (sum / size < 1_400_000) {
+			return true;
+		} else {
+			System.err.println(file);
+			System.err.println(sum / size);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Filter all images in spin mode.
+	 */
+	private static void filter() throws IOException {
+		for (File file : (new File("./data/input")).listFiles()) {
+			if (file.isFile() == false) {
+				continue;
+			}
+
+			if (file.getName().contains(".png") == false) {
+				continue;
+			}
+
+			if (captureSpinMode(file.getPath()) == true) {
+				Files.deleteIfExists(file.toPath());
+			}
+		}
+	}
+
+	/**
 	 * Processing of the images.
 	 * 
 	 * @throws IOException
@@ -362,7 +327,8 @@ public class Main {
 	 */
 	public static void main(String[] args) throws IOException {
 		// samples();
-		// process();
+		// filter();
+		process();
 	}
 
 }
